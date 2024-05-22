@@ -20,6 +20,8 @@
 .boardStyle {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   width: 279px;
   height: 80px;
   margin: 10px; /* 上・左右 */
@@ -52,15 +54,12 @@
   border: outset 3px;
 }
 
-/* .nicoStyle {
+.nicoStyle {
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   border: outset 3px;
-  border: solid #999;
-} */
+}
 
 .sampleStyle {
   width: 30px;

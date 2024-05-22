@@ -30,22 +30,27 @@ const Home = () => {
 
   console.log(samplePos);
   console.log(styles.box1);
-  // const cellClickHandler = (x, y) => {
+  // const clickHandler = (x, y) => {
   //   console.log(`Cell clicked at x: ${x}, y: ${y}`);
   //   // ここにセルをクリックした際の処理を追加
   // };
   return (
     <div className={styles.container}>
       <div className={styles.bigboardStyle}>
-        <div className={styles.boardStyle} />
+        <div className={styles.boardStyle}>
+          <div className={styles.nicoStyle}>
+            {/* <button onClick={() => setsamplePos((p) => (p + 1) % 14)}>sample</button> */}
+          </div>
+        </div>
+
         <div className={styles.gameboardStyle}>
           {userInputs.map((row, y) =>
             row.map((number, x) => (
-              <div className={styles.stoneStyle}>
-                <div
+              <div className={styles.stoneStyle} key={`${x}-${y}`}>
+                {/* <div
                   className={styles.sampleStyle}
                   style={{ backgroundPosition: `${samplePos * -30}px 0px` }}
-                />
+                /> */}
               </div>
 
               // <div className={styles.cellStyle}>
