@@ -17,7 +17,7 @@
   border: outset 5px;
 }
 
-.boardStyle {
+.pointStyle {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -48,10 +48,14 @@
 }
 
 .stoneStyle {
+  box-sizing: border-box;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
-  border: outset 3px;
+  border: solid;
+  border-width: 3px;
 }
 
 .nicoStyle {
@@ -62,6 +66,7 @@
 }
 
 .sampleStyle {
+  position: absolute;
   width: 30px;
   height: 30px;
   background: url('~/src/assets/images/icons.png') no-repeat;
