@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import styles from './index.module.css';
 
+const directions = [
+  [0, 1],
+  [-1, 1],
+  [-1, 0],
+  [-1, -1],
+  [0, -1],
+  [1, -1],
+  [1, 0],
+  [1, 1],
+];
+
 const Home = () => {
   const [samplePos, setsamplePos] = useState(0);
   const [bombMap, setBombMap] = useState([
@@ -26,22 +37,23 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const [board, setboard] = useState([
-    [-1, 1, 2, 3, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
-
-  const newboard = structuredClone(bombMap);
+  const board = structuredClone(bombMap);
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
-      board[y][x] = userInputs[y][x] === 0 ? -1 : 1;
+      if (userInputs[y][x] === 0) {
+        board[y][x] = -1;
+      } else {
+        let bombCount = 0;
+        for (const [dy, dx] of directions) {
+          const nx = x + dx;
+          const ny = y + dy;
+          if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) break;
+          if (board[ny][nx] === 11) {
+            bombCount += 1;
+          }
+        }
+        board[y][x] = bombMap[y][x] === 1 ? 11 : bombCount;
+      }
     }
   }
 
@@ -66,19 +78,28 @@ const Home = () => {
       bombPosition.push([bomby, bombx]);
     }
     for (const s of bombPosition) {
-      bombMap[s[1]][s[0]] = 11;
+      bombMap[s[1]][s[0]] = 1;
     }
     return bombMap;
   };
 
   const clickHandler = (x: number, y: number) => {
+    let bombCount = 0;
+    for (let y = 0; y < 9; y++) {
+      for (let x = 0; x < 9; x++) {
+        if (bombMap[y][x] === 1) {
+          bombCount += 1;
+        }
+      }
+    }
+    if (bombCount === 0) {
+      const newbomMap = structuredClone(bombMap);
+      setBombMap(bombset(x, y, newbomMap));
+      console.log(x, y);
+    }
     const newUserInputs = structuredClone(userInputs);
     newUserInputs[y][x] = 1;
     setUserInputs(newUserInputs);
-
-    const newbomMap = structuredClone(bombMap);
-    setBombMap(bombset(x, y, newbomMap));
-    console.log(x, y);
   };
 
   return (
