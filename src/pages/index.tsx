@@ -15,7 +15,7 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
   const [userInputs, setUserInputs] = useState([
-    [1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -27,7 +27,7 @@ const Home = () => {
   ]);
 
   const [board, setboard] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [-1, 1, 2, 3, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -37,8 +37,14 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
-  // const board = [...Array(9)].map((_, y) => [...Array(9)].map((_, x) => ((y + x + 1) % 13) - 1));
-  // const board: number[][] = [];
+
+  const newboard = structuredClone(bombMap);
+  for (let y = 0; y < 9; y++) {
+    for (let x = 0; x < 9; x++) {
+      board[y][x] = userInputs[y][x] === 0 ? -1 : 1;
+    }
+  }
+
   const bombset = (x: number, y: number, bombMap: number[][]) => {
     const bombPosition: number[][] = [];
     while (bombPosition.length < 10) {
@@ -64,16 +70,17 @@ const Home = () => {
     }
     return bombMap;
   };
-  console.log(samplePos);
-  console.log(styles.box1);
+
   const clickHandler = (x: number, y: number) => {
+    const newUserInputs = structuredClone(userInputs);
+    newUserInputs[y][x] = 1;
+    setUserInputs(newUserInputs);
+
     const newbomMap = structuredClone(bombMap);
     setBombMap(bombset(x, y, newbomMap));
     console.log(x, y);
   };
-  //   console.log(`Cell clicked at x: ${x}, y: ${y}`);
-  //   // ここにセルをクリックした際の処理を追加
-  // };
+
   return (
     <div className={styles.container}>
       <div className={styles.bigboardStyle}>
@@ -88,20 +95,20 @@ const Home = () => {
         </div>
 
         <div className={styles.gameboardStyle}>
-          {bombMap.map((row, y) =>
+          {board.map((row, y) =>
             row.map((cell, x) => (
               <div
                 className={styles.stoneStyle}
                 onClick={() => clickHandler(x, y)}
                 key={`${x}-${y}`}
                 style={{
-                  borderColor: bombMap[y][x] >= 0 ? '#909090' : '#fff #909090 #909090 #fff',
+                  borderColor: board[y][x] >= 0 ? '#909090' : '#fff #909090 #909090 #fff',
                 }}
               >
                 <div
                   className={styles.sampleStyle}
                   style={{
-                    backgroundPosition: `${(bombMap[y][x] - 1) * -30}px 0px`,
+                    backgroundPosition: `${(board[y][x] - 1) * -30}px 0px`,
                   }}
 
                   // onClick={() => clickHandler(y, x)}
