@@ -48,7 +48,7 @@ const Home = () => {
           const nx = x + dx;
           const ny = y + dy;
 
-          if (nx < 0 || nx > 9 || ny < 0 || ny >= 9) continue;
+          if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
           if (bombMap[ny][nx] === 1) {
             bombCount += 1;
           }
@@ -110,14 +110,16 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <div className={styles.bigboardStyle}>
-        <div className={styles.pointStyle}>
+        <div className={styles.pointBoardStyle}>
+          <div className={styles.bombCountStyle} />
           <div className={styles.nicoStyle}>
             <div
               className={styles.sampleStyle}
-              style={{ backgroundPosition: `${samplePos * -30}px 0px` }}
+              style={{ backgroundPosition: `${12 * -30}px 0px` }}
             />
             {/* <button onClick={() => setsamplePos((p) => (p + 1) % 14)}>sample</button> */}
           </div>
+          <div className={styles.timeStyle} />
         </div>
 
         <div className={styles.gameboardStyle}>

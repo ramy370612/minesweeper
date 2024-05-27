@@ -17,7 +17,7 @@
   border: outset 5px;
 }
 
-.pointStyle {
+.pointBoardStyle {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -27,6 +27,38 @@
   margin: 10px; /* 上・左右 */
   background-color: silver;
   border: inset 5px;
+}
+
+.bombCountStyle {
+  display: flex;
+  flex-wrap: wrap;
+  width: 60px;
+  height: 40px;
+  margin-right: 45px;
+  margin-left: 10px;
+  background-color: black;
+  border: inset 1px #fff;
+}
+
+.nicoStyle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: outset 3px;
+}
+
+.timeStyle {
+  display: flex;
+  flex-wrap: wrap;
+  width: 60px;
+  height: 40px;
+  margin-right: 10px;
+  margin-left: 45px;
+  background-color: black;
+  border: inset 1px #fff;
 }
 
 .gameboardStyle {
@@ -54,21 +86,14 @@
   justify-content: center;
   width: 30px;
   height: 30px;
-  border: solid;
+  border: solid 1px;
   border-width: 3px;
-}
-
-.nicoStyle {
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: outset 3px;
 }
 
 .sampleStyle {
   position: absolute;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
   margin: -3px;
