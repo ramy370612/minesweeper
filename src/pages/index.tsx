@@ -2,14 +2,14 @@ import { useState } from 'react';
 import styles from './index.module.css';
 
 const directions = [
-  [0, 1],
-  [-1, 1],
-  [-1, 0],
-  [-1, -1],
-  [0, -1],
-  [1, -1],
-  [1, 0],
-  [1, 1],
+  [0, 1], //右
+  [-1, 1], //右下
+  [-1, 0], //下
+  [-1, -1], //左下
+  [0, -1], //左
+  [1, -1], //左上
+  [1, 0], //上
+  [1, 1], //右上
 ];
 
 const Home = () => {
@@ -47,8 +47,9 @@ const Home = () => {
         for (const [dy, dx] of directions) {
           const nx = x + dx;
           const ny = y + dy;
-          if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) break;
-          if (board[ny][nx] === 11) {
+
+          if (nx < 0 || nx > 9 || ny < 0 || ny >= 9) continue;
+          if (bombMap[ny][nx] === 1) {
             bombCount += 1;
           }
         }
@@ -57,6 +58,7 @@ const Home = () => {
     }
   }
 
+  // ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
     const bombPosition: number[][] = [];
     while (bombPosition.length < 10) {
@@ -83,7 +85,9 @@ const Home = () => {
     return bombMap;
   };
 
+  //クリック時の動作
   const clickHandler = (x: number, y: number) => {
+    console.log(x, y);
     let bombCount = 0;
     for (let y = 0; y < 9; y++) {
       for (let x = 0; x < 9; x++) {
@@ -97,6 +101,7 @@ const Home = () => {
       setBombMap(bombset(x, y, newbomMap));
       console.log(x, y);
     }
+
     const newUserInputs = structuredClone(userInputs);
     newUserInputs[y][x] = 1;
     setUserInputs(newUserInputs);
