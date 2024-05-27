@@ -115,7 +115,7 @@ const Home = () => {
           <div className={styles.nicoStyle}>
             <div
               className={styles.sampleStyle}
-              style={{ backgroundPosition: `${12 * -30}px 0px` }}
+              style={{ backgroundPosition: `${11 * -30}px 0px` }}
             />
             {/* <button onClick={() => setsamplePos((p) => (p + 1) % 14)}>sample</button> */}
           </div>
