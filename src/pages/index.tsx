@@ -37,6 +37,41 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
+  //再起関数
+
+  const openCell = (board: number[][], x: number, y: number) => {
+    for (const [dy, dx] of directions) {
+      const nx = x + dx;
+      const ny = y + dy;
+      if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
+      let bombCount = 0;
+      for (const [dy, dx] of directions) {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
+
+        if (bombMap[ny][nx] === 1) {
+          bombCount += 1;
+        }
+        board[ny][nx] = bombCount;
+      }
+    }
+    // if (x < 0 || x >= 9 || y < 0 || y >= 9 || openboard[y][x] === 0) {
+    //   return;
+    // }
+    // console.log(1, 1, 1);
+    // openboard[y][x] = 0;
+    // const board = structuredClone(openboard);
+    // board[y][x] = 0;
+    // if (bombMap[y][x] === 0) {
+    //   for (const [dy, dx] of directions) {
+    //     const ny = y + dy;
+    //     const nx = x + dx;
+    //     openCell(board, ny, nx);
+    //     board[y][x] = openboard[ny][nx];
+    //   }
+    // }
+  };
   const board = structuredClone(bombMap);
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
@@ -49,6 +84,7 @@ const Home = () => {
           const ny = y + dy;
 
           if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
+
           if (bombMap[ny][nx] === 1) {
             bombCount += 1;
           }
@@ -57,7 +93,13 @@ const Home = () => {
       }
     }
   }
-
+  for (let y = 0; y < 9; y++) {
+    for (let x = 0; x < 9; x++) {
+      if (board[y][x] === 0) {
+        openCell(board, x, y);
+      }
+    }
+  }
   // ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
     const bombPosition: number[][] = [];
@@ -128,6 +170,7 @@ const Home = () => {
               <div
                 className={styles.stoneStyle}
                 onClick={() => clickHandler(x, y)}
+                {...() => openCell(board, x, y)}
                 key={`${x}-${y}`}
                 style={{
                   borderColor: board[y][x] >= 0 ? '#909090' : '#fff #909090 #909090 #fff',
