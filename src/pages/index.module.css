@@ -17,7 +17,7 @@
   border: outset 5px;
 }
 
-.pointBoardStyle {
+.miniBoardStyle {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -37,7 +37,7 @@
   margin-right: 45px;
   margin-left: 10px;
   background-color: black;
-  border: inset 1px #fff;
+  border: inset 2px #fff;
 }
 
 .nicoStyle {
@@ -58,7 +58,7 @@
   margin-right: 10px;
   margin-left: 45px;
   background-color: black;
-  border: inset 1px #fff;
+  border: inset 2px #fff;
 }
 
 .gameboardStyle {

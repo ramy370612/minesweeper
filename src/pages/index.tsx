@@ -38,23 +38,21 @@ const Home = () => {
   ]);
 
   //再起関数
-
   const openCell = (board: number[][], x: number, y: number) => {
     for (const [dy, dx] of directions) {
       const nx = x + dx;
       const ny = y + dy;
       if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
       let bombCount = 0;
-      for (const [dy, dx] of directions) {
-        const nx = x + dx;
-        const ny = y + dy;
-        if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
-
-        if (bombMap[ny][nx] === 1) {
+      for (const [ey, ex] of directions) {
+        const tx = nx + ex;
+        const ty = ny + ey;
+        if (tx < 0 || tx >= 9 || ty < 0 || ty >= 9) continue;
+        if (bombMap[ty][tx] === 1) {
           bombCount += 1;
         }
-        board[ny][nx] = bombCount;
       }
+      board[ny][nx] = bombCount;
     }
     // if (x < 0 || x >= 9 || y < 0 || y >= 9 || openboard[y][x] === 0) {
     //   return;
@@ -72,6 +70,8 @@ const Home = () => {
     //   }
     // }
   };
+
+  //userInputsとbombMapとopenCellをboardに反映
   const board = structuredClone(bombMap);
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
@@ -88,8 +88,8 @@ const Home = () => {
           if (bombMap[ny][nx] === 1) {
             bombCount += 1;
           }
+          board[y][x] = bombMap[y][x] === 1 ? 11 : bombCount;
         }
-        board[y][x] = bombMap[y][x] === 1 ? 11 : bombCount;
       }
     }
   }
@@ -97,9 +97,21 @@ const Home = () => {
     for (let x = 0; x < 9; x++) {
       if (board[y][x] === 0) {
         openCell(board, x, y);
+        // const bombCount = 0;
+        // for (const [dy, dx] of directions) {
+        //   const nx = x + dx;
+        //   const ny = y + dy;
+        //   if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
+
+        //   if (bombMap[ny][nx] === 1) {
+        //     bombCount += 1;
+        //   }
+        //   board[y][x] = bombCount;
+        // }
       }
     }
   }
+
   // ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
     const bombPosition: number[][] = [];
@@ -126,6 +138,7 @@ const Home = () => {
     }
     return bombMap;
   };
+  console.log(bombMap);
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
@@ -151,14 +164,23 @@ const Home = () => {
 
   return (
     <div className={styles.container}>
+      {/* <button onClick={() => userInputs((p) => (p + 1) % 14)}>初級</button> */}
       <div className={styles.bigboardStyle}>
-        <div className={styles.pointBoardStyle}>
+        <div className={styles.miniBoardStyle}>
           <div className={styles.bombCountStyle} />
           <div className={styles.nicoStyle}>
-            <div
-              className={styles.sampleStyle}
-              style={{ backgroundPosition: `${11 * -30}px 0px` }}
-            />
+            {board.map((row, y) =>
+              row.map((cell, x) => (
+                <div
+                  className={styles.sampleStyle}
+                  key={`${x}-${y}`}
+                  style={{
+                    backgroundPosition:
+                      board[y][x] === 11 ? `${13 * -30}px 0px` : `${11 * -30}px 0px`,
+                  }}
+                />
+              )),
+            )}
             {/* <button onClick={() => setsamplePos((p) => (p + 1) % 14)}>sample</button> */}
           </div>
           <div className={styles.timeStyle} />
