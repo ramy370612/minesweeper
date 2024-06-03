@@ -35,6 +35,7 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
   //再起関数
   const openCell = (board: number[][], x: number, y: number) => {
@@ -43,13 +44,11 @@ const Home = () => {
     for (const [dy, dx] of directions) {
       const nx = x + dx;
       const ny = y + dy;
-
       if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
 
       if (bombMap[ny][nx] === 1) {
         bombCount += 1;
       }
-
       board[y][x] = bombMap[y][x] === 1 ? 11 : bombCount;
     }
 
@@ -68,8 +67,6 @@ const Home = () => {
   };
   //userInputsが0なら石にする・1ならopenCellを呼び出す
   const board = structuredClone(bombMap);
-  console.log('board');
-  console.table(board);
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       if (userInputs[y][x] === 0) {
@@ -79,8 +76,6 @@ const Home = () => {
       }
     }
   }
-  console.log('board2');
-  console.table(board);
 
   // ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
@@ -111,6 +106,7 @@ const Home = () => {
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
+    console.log('x,y');
     console.log(x, y);
     let bombCount = 0;
     for (let y = 0; y < 9; y++) {
@@ -119,6 +115,9 @@ const Home = () => {
           bombCount += 1;
         }
       }
+    }
+    if (bombMap[y][x] === 1) {
+      setIsGameOver(true);
     }
     if (bombCount === 0) {
       const newbomMap = structuredClone(bombMap);
@@ -144,7 +143,7 @@ const Home = () => {
                   key={`${x}-${y}`}
                   style={{
                     backgroundPosition:
-                      board[y][x] === 11 ? `${13 * -30}px 0px` : `${11 * -30}px 0px`,
+                      isGameOver === true ? `${13 * -30}px 0px` : `${11 * -30}px 0px`,
                   }}
                 />
               )),
