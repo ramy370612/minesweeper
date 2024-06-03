@@ -11,7 +11,7 @@
 .bigboardStyle {
   display: flex;
   flex-wrap: wrap;
-  width: 309px;
+  width: 310px;
   height: 400px;
   background-color: silver;
   border: outset 5px;
@@ -22,7 +22,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  width: 279px;
+  width: 280px;
   height: 80px;
   margin: 10px; /* 上・左右 */
   background-color: silver;
@@ -64,8 +64,8 @@
 .gameboardStyle {
   display: flex;
   flex-wrap: wrap;
-  width: 279px;
-  height: 279px;
+  width: 280px;
+  height: 280px;
   margin: 0 10px 10px; /* 上・左右・下 */
   background-color: silver;
   border: inset 5px;
@@ -86,7 +86,7 @@
   justify-content: center;
   width: 30px;
   height: 30px;
-  border: solid 1px;
+  border: solid;
   border-width: 3px;
 }
 

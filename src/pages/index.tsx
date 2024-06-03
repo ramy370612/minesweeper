@@ -13,7 +13,6 @@ const directions = [
 ];
 
 const Home = () => {
-  const [samplePos, setsamplePos] = useState(0);
   const [bombMap, setBombMap] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -39,78 +38,49 @@ const Home = () => {
 
   //再起関数
   const openCell = (board: number[][], x: number, y: number) => {
+    let bombCount = 0;
+    // クリックしたセルのボードの周りのボムを数え、ボム数を表示・bombMapをboardに反映させる
+    for (const [dy, dx] of directions) {
+      const nx = x + dx;
+      const ny = y + dy;
+
+      if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
+
+      if (bombMap[ny][nx] === 1) {
+        bombCount += 1;
+      }
+
+      board[y][x] = bombMap[y][x] === 1 ? 11 : bombCount;
+    }
+
+    // クリックしたセルがボムだったら再起関数終了
+    if (bombMap[y][x] === 1) return;
+    // 周りに０があったら開く
     for (const [dy, dx] of directions) {
       const nx = x + dx;
       const ny = y + dy;
       if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
-      let bombCount = 0;
-      for (const [ey, ex] of directions) {
-        const tx = nx + ex;
-        const ty = ny + ey;
-        if (tx < 0 || tx >= 9 || ty < 0 || ty >= 9) continue;
-        if (bombMap[ty][tx] === 1) {
-          bombCount += 1;
-        }
+      if (bombCount === 0 && userInputs[ny][nx] === 0 && bombMap[ny][nx] === 0) {
+        userInputs[ny][nx] = 1;
+        openCell(board, nx, ny);
       }
-      board[ny][nx] = bombCount;
     }
-    // if (x < 0 || x >= 9 || y < 0 || y >= 9 || openboard[y][x] === 0) {
-    //   return;
-    // }
-    // console.log(1, 1, 1);
-    // openboard[y][x] = 0;
-    // const board = structuredClone(openboard);
-    // board[y][x] = 0;
-    // if (bombMap[y][x] === 0) {
-    //   for (const [dy, dx] of directions) {
-    //     const ny = y + dy;
-    //     const nx = x + dx;
-    //     openCell(board, ny, nx);
-    //     board[y][x] = openboard[ny][nx];
-    //   }
-    // }
   };
-
-  //userInputsとbombMapとopenCellをboardに反映
+  //userInputsが0なら石にする・1ならopenCellを呼び出す
   const board = structuredClone(bombMap);
+  console.log('board');
+  console.table(board);
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       if (userInputs[y][x] === 0) {
         board[y][x] = -1;
       } else {
-        let bombCount = 0;
-        for (const [dy, dx] of directions) {
-          const nx = x + dx;
-          const ny = y + dy;
-
-          if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
-
-          if (bombMap[ny][nx] === 1) {
-            bombCount += 1;
-          }
-          board[y][x] = bombMap[y][x] === 1 ? 11 : bombCount;
-        }
-      }
-    }
-  }
-  for (let y = 0; y < 9; y++) {
-    for (let x = 0; x < 9; x++) {
-      if (board[y][x] === 0) {
         openCell(board, x, y);
-        // const bombCount = 0;
-        // for (const [dy, dx] of directions) {
-        //   const nx = x + dx;
-        //   const ny = y + dy;
-        //   if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
-
-        //   if (bombMap[ny][nx] === 1) {
-        //     bombCount += 1;
-        //   }
-        //   board[y][x] = bombCount;
-        // }
       }
     }
   }
+  console.log('board2');
+  console.table(board);
 
   // ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
@@ -118,7 +88,7 @@ const Home = () => {
     while (bombPosition.length < 10) {
       const bombx = Math.floor(Math.random() * 9);
       const bomby = Math.floor(Math.random() * 9);
-      console.log(bomby, bombx);
+      // console.table([bomby, bombx]);
       if (x === bombx && y === bomby) {
         continue;
       }
@@ -138,7 +108,6 @@ const Home = () => {
     }
     return bombMap;
   };
-  console.log(bombMap);
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
@@ -154,7 +123,6 @@ const Home = () => {
     if (bombCount === 0) {
       const newbomMap = structuredClone(bombMap);
       setBombMap(bombset(x, y, newbomMap));
-      console.log(x, y);
     }
 
     const newUserInputs = structuredClone(userInputs);
@@ -192,7 +160,6 @@ const Home = () => {
               <div
                 className={styles.stoneStyle}
                 onClick={() => clickHandler(x, y)}
-                {...() => openCell(board, x, y)}
                 key={`${x}-${y}`}
                 style={{
                   borderColor: board[y][x] >= 0 ? '#909090' : '#fff #909090 #909090 #fff',
@@ -206,7 +173,6 @@ const Home = () => {
 
                   // onClick={() => clickHandler(y, x)}
                 />
-
                 {/* <div
                   className={styles.sampleStyle}
                   style={{ backgroundPosition: `${samplePos * -30}px 0px` }}
