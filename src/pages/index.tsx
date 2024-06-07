@@ -36,12 +36,14 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
-  const [isGameClear, setIsGameClear] = useState<boolean>(false);
+  // const [isGameClear, setIsGameClear] = useState<boolean>(false);
 
   //再起関数
   const openCell = (board: number[][], x: number, y: number) => {
-    console.log('openCell');
-    console.table(userInputs);
+    // console.log('openCell');
+    // console.table(userInputs);
+    // console.log('bombMap');
+    // console.table(bombMap);
     // console.log(openCell);
     let bombCount = 0;
     // クリックしたセルのボードの周りのボムを数え、ボム数を表示・bombMapをboardに反映させる
@@ -56,7 +58,7 @@ const Home = () => {
       board[y][x] = bombMap[y][x] === 1 ? 11 : bombCount;
     }
 
-    // クリックしたセルがボムだったら再起関数終了
+    // ボムだったら再起関数終了
     if (bombMap[y][x] === 1) return;
     // 周りに０があったら開く
     for (const [dy, dx] of directions) {
@@ -69,12 +71,12 @@ const Home = () => {
       }
     }
   };
+
   //userInputsが0なら石にする・1ならopenCellを呼び出す
   const board = structuredClone(bombMap);
-  console.log('bombMap');
-  console.table(bombMap);
-  console.log('board');
-  console.table(board);
+
+  // console.log('board');
+  // console.table(board);
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       if (userInputs[y][x] === 0) {
@@ -84,14 +86,41 @@ const Home = () => {
       }
     }
   }
-  console.log('board2');
-  console.table(board);
+  // console.log('board2');
+  // console.table(board);
+  let bombCount2 = 0;
+  // if (isGameClear === false) {
+  for (let y = 0; y < 9; y++) {
+    for (let x = 0; x < 9; x++) {
+      if (board[y][x] !== -1 && bombMap[y][x] !== 1) {
+        bombCount2++;
+      }
+      // if (bombCount2 === 71) {
+      //   setIsGameClear(true);
+      // }
+    }
+    // }
+  }
+
+  // for (let y = 0; y < 9; y++) {
+  //   for (let x = 0; x < 9; x++) {
+  //     if (board[y][x] === -1 && bombMap[y][x] === 1) {
+  //       bombCount2++;
+  //     }
+  //   }
+  // }
+  // if (bombCount2 === 10) {
+  //   setIsGameClear(true);
+  // }
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
-    if (isGameOver === true) return;
-    console.log('click(x,y)');
-    console.log(x, y);
+    // console.log('click(x,y)');
+    // console.log(x, y);
+    // console.log('bombCount2');
+
+    if (isGameOver || bombCount2 === 71) return;
+
     let bombCount = 0;
     for (let y = 0; y < 9; y++) {
       for (let x = 0; x < 9; x++) {
@@ -103,6 +132,7 @@ const Home = () => {
     if (bombMap[y][x] === 1) {
       setIsGameOver(true);
     }
+
     if (bombCount === 0) {
       const newbomMap = structuredClone(bombMap);
       setBombMap(bombset(x, y, newbomMap));
@@ -119,7 +149,7 @@ const Home = () => {
     while (bombPosition.length < 10) {
       const bombx = Math.floor(Math.random() * 9);
       const bomby = Math.floor(Math.random() * 9);
-      // console.table([bomby, bombx]);
+      console.table([bomby, bombx]);
       if (x === bombx && y === bomby) {
         continue;
       }
@@ -139,26 +169,7 @@ const Home = () => {
     }
     return bombMap;
   };
-
-  // const reset = (x: number, y: number) => {
-  //   console.log('reset');
-  //   for (let y = 0; y < 9; y++) {
-  //     for (let x = 0; x < 9; x++) {
-
-  //     }}
-  //   const newUserInputs = structuredClone(userInputs);
-  //   newUserInputs[y][x] = 0;
-  //   setUserInputs(newUserInputs);
-  //   console.log('bombMap');
-  //   console.table(bombMap);
-
-  //   const newbomMap = structuredClone(bombMap);
-  //   newbomMap[y][x] = 0;
-  //   setBombMap(newbomMap);
-  //   console.log('useInputs');
-  //   console.table(userInputs);
-  // };
-
+  console.log(bombCount2);
   return (
     <div className={styles.container}>
       {/* <button onClick={() => userInputs((p) => (p + 1) % 14)}>初級</button> */}
@@ -169,7 +180,12 @@ const Home = () => {
             <div
               className={styles.sampleStyle}
               style={{
-                backgroundPosition: isGameOver === true ? `${13 * -30}px 0px` : `${11 * -30}px 0px`,
+                backgroundPosition:
+                  isGameOver === true
+                    ? `${13 * -30}px 0px`
+                    : bombCount2 === 71
+                      ? `${12 * -30}px 0px`
+                      : `${11 * -30}px 0px`,
               }}
             />
 
@@ -195,13 +211,7 @@ const Home = () => {
                   style={{
                     backgroundPosition: `${(board[y][x] - 1) * -30}px 0px`,
                   }}
-
-                  // onClick={() => clickHandler(y, x)}
                 />
-                {/* <div
-                  className={styles.sampleStyle}
-                  style={{ backgroundPosition: `${samplePos * -30}px 0px` }}
-                /> */}
               </div>
 
               // <div className={styles.cellStyle}>
