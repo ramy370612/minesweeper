@@ -36,17 +36,11 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
-  // const [isGameClear, setIsGameClear] = useState<boolean>(false);
 
   //再起関数
   const openCell = (board: number[][], x: number, y: number) => {
-    // console.log('openCell');
-    // console.table(userInputs);
-    // console.log('bombMap');
-    // console.table(bombMap);
-    // console.log(openCell);
     let bombCount = 0;
-    // クリックしたセルのボードの周りのボムを数え、ボム数を表示・bombMapをboardに反映させる
+    //クリックしたセルのボードの周りのボムを数え、ボム数を表示・bombMapをboardに反映させる
     for (const [dy, dx] of directions) {
       const nx = x + dx;
       const ny = y + dy;
@@ -75,8 +69,6 @@ const Home = () => {
   //userInputsが0なら石にする・1ならopenCellを呼び出す
   const board = structuredClone(bombMap);
 
-  // console.log('board');
-  // console.table(board);
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       if (userInputs[y][x] === 0) {
@@ -86,21 +78,18 @@ const Home = () => {
       }
     }
   }
-  // console.log('board2');
-  // console.table(board);
-  let bombCount2 = 0;
-  // if (isGameClear === false) {
-  for (let y = 0; y < 9; y++) {
-    for (let x = 0; x < 9; x++) {
-      if (board[y][x] !== -1 && bombMap[y][x] !== 1) {
-        bombCount2++;
+
+  const isGameClear = () => {
+    let bombCount2 = 0;
+    for (let y = 0; y < 9; y++) {
+      for (let x = 0; x < 9; x++) {
+        if (board[y][x] !== -1 && bombMap[y][x] !== 1) {
+          bombCount2++;
+        }
       }
-      // if (bombCount2 === 71) {
-      //   setIsGameClear(true);
-      // }
     }
-    // }
-  }
+    return bombCount2 === 71;
+  };
 
   // for (let y = 0; y < 9; y++) {
   //   for (let x = 0; x < 9; x++) {
@@ -115,11 +104,7 @@ const Home = () => {
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
-    // console.log('click(x,y)');
-    // console.log(x, y);
-    // console.log('bombCount2');
-
-    if (isGameOver || bombCount2 === 71) return;
+    if (isGameOver || isGameClear()) return;
 
     let bombCount = 0;
     for (let y = 0; y < 9; y++) {
@@ -143,33 +128,37 @@ const Home = () => {
     setUserInputs(newUserInputs);
   };
 
-  // ボムをランダムに置く
+  //ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
     const bombPosition: number[][] = [];
-    while (bombPosition.length < 10) {
-      const bombx = Math.floor(Math.random() * 9);
-      const bomby = Math.floor(Math.random() * 9);
-      console.table([bomby, bombx]);
-      if (x === bombx && y === bomby) {
-        continue;
-      }
-      const double = [0];
-      for (const i of bombPosition) {
-        if (i[0] === bomby && i[1] === bombx) {
-          double[0]++;
-          break;
-        }
-      }
-      if (double[0] === 1) continue;
+    // while (bombPosition.length < 10) {
+    //   const bombx = Math.floor(Math.random() * 9);
+    //   const bomby = Math.floor(Math.random() * 9);
+    //   console.table([bomby, bombx]);
+    //   if (x === bombx && y === bomby) {
+    //     continue;
+    //   }
+    //   const double = [0];
+    //   for (const i of bombPosition) {
+    //     if (i[0] === bomby && i[1] === bombx) {
+    //       double[0]++;
+    //       break;
+    //     }
+    //   }
+    //   if (double[0] === 1) continue;
 
-      bombPosition.push([bomby, bombx]);
+    //   bombPosition.push([bomby, bombx]);
+    // }
+    for (let i = 0; i < 9; i++) {
+      bombPosition.push([0, i]);
     }
+    bombPosition.push([1, 1]);
+
     for (const s of bombPosition) {
       bombMap[s[1]][s[0]] = 1;
     }
     return bombMap;
   };
-  console.log(bombCount2);
   return (
     <div className={styles.container}>
       {/* <button onClick={() => userInputs((p) => (p + 1) % 14)}>初級</button> */}
@@ -183,7 +172,7 @@ const Home = () => {
                 backgroundPosition:
                   isGameOver === true
                     ? `${13 * -30}px 0px`
-                    : bombCount2 === 71
+                    : isGameClear()
                       ? `${12 * -30}px 0px`
                       : `${11 * -30}px 0px`,
               }}
