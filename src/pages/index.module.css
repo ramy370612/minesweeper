@@ -50,6 +50,10 @@
   border: outset 3px;
 }
 
+.nicoStyle:active {
+  border: inset;
+}
+
 .timeStyle {
   display: flex;
   flex-wrap: wrap;

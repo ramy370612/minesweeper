@@ -91,17 +91,6 @@ const Home = () => {
     return bombCount2 === 71;
   };
 
-  // for (let y = 0; y < 9; y++) {
-  //   for (let x = 0; x < 9; x++) {
-  //     if (board[y][x] === -1 && bombMap[y][x] === 1) {
-  //       bombCount2++;
-  //     }
-  //   }
-  // }
-  // if (bombCount2 === 10) {
-  //   setIsGameClear(true);
-  // }
-
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
     if (isGameOver || isGameClear()) return;
@@ -131,34 +120,60 @@ const Home = () => {
   //ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
     const bombPosition: number[][] = [];
-    // while (bombPosition.length < 10) {
-    //   const bombx = Math.floor(Math.random() * 9);
-    //   const bomby = Math.floor(Math.random() * 9);
-    //   console.table([bomby, bombx]);
-    //   if (x === bombx && y === bomby) {
-    //     continue;
-    //   }
-    //   const double = [0];
-    //   for (const i of bombPosition) {
-    //     if (i[0] === bomby && i[1] === bombx) {
-    //       double[0]++;
-    //       break;
-    //     }
-    //   }
-    //   if (double[0] === 1) continue;
+    while (bombPosition.length < 10) {
+      const bombx = Math.floor(Math.random() * 9);
+      const bomby = Math.floor(Math.random() * 9);
+      console.table([bomby, bombx]);
+      if (x === bombx && y === bomby) {
+        continue;
+      }
+      const double = [0];
+      for (const i of bombPosition) {
+        if (i[0] === bomby && i[1] === bombx) {
+          double[0]++;
+          break;
+        }
+      }
+      if (double[0] === 1) continue;
 
-    //   bombPosition.push([bomby, bombx]);
-    // }
-    for (let i = 0; i < 9; i++) {
-      bombPosition.push([0, i]);
+      bombPosition.push([bomby, bombx]);
     }
-    bombPosition.push([1, 1]);
 
     for (const s of bombPosition) {
       bombMap[s[1]][s[0]] = 1;
     }
     return bombMap;
   };
+
+  const resetButton = () => {
+    setIsGameOver(false);
+    const newbomMap = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    setBombMap(newbomMap);
+
+    const newUserInputs = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    setUserInputs(newUserInputs);
+  };
+
   return (
     <div className={styles.container}>
       {/* <button onClick={() => userInputs((p) => (p + 1) % 14)}>初級</button> */}
@@ -176,6 +191,7 @@ const Home = () => {
                       ? `${12 * -30}px 0px`
                       : `${11 * -30}px 0px`,
               }}
+              onClick={() => resetButton()}
             />
 
             {/* <button onClick={() => setsamplePos((p) => (p + 1) % 14)}>sample</button> */}
@@ -192,7 +208,6 @@ const Home = () => {
                 key={`${x}-${y}`}
                 style={{
                   borderColor: board[y][x] >= 0 ? '#909090' : '#fff #909090 #909090 #fff',
-                  // backgroundColor: isGameOver === true ? '#e05454' : '#909090',
                 }}
               >
                 <div
@@ -202,8 +217,6 @@ const Home = () => {
                   }}
                 />
               </div>
-
-              // <div className={styles.cellStyle}>
 
               //
             )),
