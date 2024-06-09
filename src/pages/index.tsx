@@ -35,7 +35,6 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
-  const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
   //再起関数
   const openCell = (board: number[][], x: number, y: number) => {
@@ -78,6 +77,13 @@ const Home = () => {
       }
     }
   }
+  let setIsGameOver = false;
+  const isGameOver = (x: number, y: number) => {
+    if (userInputs[y][x] === 1 && bombMap[y][x] === 1) {
+      setIsGameOver = true;
+    }
+    return setIsGameOver;
+  };
 
   const isGameClear = () => {
     let bombCount2 = 0;
@@ -93,7 +99,7 @@ const Home = () => {
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
-    if (isGameOver || isGameClear()) return;
+    if (setIsGameOver === true || isGameClear()) return;
 
     let bombCount = 0;
     for (let y = 0; y < 9; y++) {
@@ -102,9 +108,6 @@ const Home = () => {
           bombCount += 1;
         }
       }
-    }
-    if (bombMap[y][x] === 1) {
-      setIsGameOver(true);
     }
 
     if (bombCount === 0) {
@@ -146,7 +149,7 @@ const Home = () => {
   };
 
   const resetButton = () => {
-    setIsGameOver(false);
+    setIsGameOver = false;
     const newbomMap = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -178,21 +181,24 @@ const Home = () => {
     <div className={styles.container}>
       {/* <button onClick={() => userInputs((p) => (p + 1) % 14)}>初級</button> */}
       <div className={styles.bigboardStyle}>
-        <div className={styles.miniBoardStyle}>
+        <div className={styles.miniBoardStyle} onClick={() => resetButton()}>
           <div className={styles.bombCountStyle} />
           <div className={styles.nicoStyle}>
-            <div
-              className={styles.sampleStyle}
-              style={{
-                backgroundPosition:
-                  isGameOver === true
-                    ? `${13 * -30}px 0px`
-                    : isGameClear()
-                      ? `${12 * -30}px 0px`
-                      : `${11 * -30}px 0px`,
-              }}
-              onClick={() => resetButton()}
-            />
+            {board.map((row, y) =>
+              row.map((cell, x) => (
+                <div
+                  className={styles.sampleStyle}
+                  key={`${x}-${y}`}
+                  style={{
+                    backgroundPosition: isGameOver(x, y)
+                      ? `${13 * -30}px 0px`
+                      : isGameClear()
+                        ? `${12 * -30}px 0px`
+                        : `${11 * -30}px 0px`,
+                  }}
+                />
+              )),
+            )}
 
             {/* <button onClick={() => setsamplePos((p) => (p + 1) % 14)}>sample</button> */}
           </div>
