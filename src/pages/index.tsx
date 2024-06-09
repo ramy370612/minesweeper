@@ -234,7 +234,8 @@ const Home = () => {
                     board[y][x] >= 0 && board[y][x] !== 10
                       ? '#909090'
                       : '#fff #909090 #909090 #fff',
-                  backgroundColor: isGameOver(x, y) ? '#f39c9c' : '#c9c7c7',
+                  backgroundColor:
+                    isGameOver(x, y) && bombMap[y][x] && userInputs[y][x] ? '#f39c9c' : '#c9c7c7',
                 }}
               >
                 <div
