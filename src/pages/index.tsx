@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './index.module.css';
 
 const directions = [
@@ -77,6 +77,7 @@ const Home = () => {
       }
     }
   }
+
   let setIsGameOver = false;
   const isGameOver = (x: number, y: number) => {
     if (userInputs[y][x] === 1 && bombMap[y][x] === 1) {
@@ -104,9 +105,32 @@ const Home = () => {
     return bombCount2 === 71;
   };
 
+  const [time, setTime] = useState(0);
+  const [isActive, setIsActive] = useState(false);
+  // const [isStarted, setIsStarted] = useState(false);
+  useEffect(() => {
+    let interval: NodeJS.Timeout | undefined;
+    if (isActive) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+    if (setIsGameOver || isGameClear()) {
+      setIsActive(false);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, time, setIsGameOver, isGameClear()]);
+
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
     if (setIsGameOver || isGameClear()) return;
+
+    if (!isActive) {
+      // setIsStarted(true);
+      setIsActive(true);
+    }
 
     let bombCount = 0;
     for (let y = 0; y < 9; y++) {
@@ -167,6 +191,9 @@ const Home = () => {
 
   const resetButton = () => {
     setIsGameOver = false;
+    setTime(0);
+    setIsActive(false);
+    // setIsStarted(false);
     const newbomMap = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -219,7 +246,7 @@ const Home = () => {
 
             {/* <button onClick={() => setsamplePos((p) => (p + 1) % 14)}>sample</button> */}
           </div>
-          <div className={styles.timeStyle} />
+          <div className={styles.timeStyle}>{time}</div>
         </div>
 
         <div className={styles.gameboardStyle}>
@@ -235,7 +262,7 @@ const Home = () => {
                       ? '#909090'
                       : '#fff #909090 #909090 #fff',
                   backgroundColor:
-                    isGameOver(x, y) && bombMap[y][x] && userInputs[y][x] ? '#f39c9c' : '#c9c7c7',
+                    isGameOver(x, y) && bombMap[y][x] && userInputs[y][x] ? '#f77f7f' : '#c9c7c7',
                 }}
               >
                 <div

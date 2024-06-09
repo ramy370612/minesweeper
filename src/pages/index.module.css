@@ -57,13 +57,27 @@
 .timeStyle {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   width: 60px;
   height: 40px;
   margin-right: 10px;
   margin-left: 50px;
+  font-size: 20px;
+  color: red;
   background-color: black;
   border: inset 2px #fff;
 }
+
+/* p#stopwatch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+} */
 
 .gameboardStyle {
   display: flex;
