@@ -75,13 +75,13 @@
   border: inset 5px;
 }
 
-.cellStyle {
+/* .cellStyle {
   display: flex;
   flex-wrap: wrap;
   width: 32px;
   height: 32px;
   border: solid #999;
-}
+} */
 
 .stoneStyle {
   box-sizing: border-box;

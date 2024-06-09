@@ -80,6 +80,13 @@ const Home = () => {
   let setIsGameOver = false;
   const isGameOver = (x: number, y: number) => {
     if (userInputs[y][x] === 1 && bombMap[y][x] === 1) {
+      for (let y = 0; y < 9; y++) {
+        for (let x = 0; x < 9; x++) {
+          if (bombMap[y][x] === 1) {
+            board[y][x] = 11;
+          }
+        }
+      }
       setIsGameOver = true;
     }
     return setIsGameOver;
@@ -99,7 +106,7 @@ const Home = () => {
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
-    if (setIsGameOver === true || isGameClear()) return;
+    if (setIsGameOver || isGameClear()) return;
 
     let bombCount = 0;
     for (let y = 0; y < 9; y++) {
@@ -147,6 +154,16 @@ const Home = () => {
     }
     return bombMap;
   };
+
+  if (isGameClear()) {
+    for (let y = 0; y < 9; y++) {
+      for (let x = 0; x < 9; x++) {
+        if (bombMap[y][x] === 1) {
+          board[y][x] = 10;
+        }
+      }
+    }
+  }
 
   const resetButton = () => {
     setIsGameOver = false;
@@ -213,7 +230,11 @@ const Home = () => {
                 onClick={() => clickHandler(x, y)}
                 key={`${x}-${y}`}
                 style={{
-                  borderColor: board[y][x] >= 0 ? '#909090' : '#fff #909090 #909090 #fff',
+                  borderColor:
+                    board[y][x] >= 0 && board[y][x] !== 10
+                      ? '#909090'
+                      : '#fff #909090 #909090 #fff',
+                  backgroundColor: isGameOver(x, y) ? '#f39c9c' : '#c9c7c7',
                 }}
               >
                 <div
