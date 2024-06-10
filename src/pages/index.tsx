@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './index.module.css';
 
 const directions = [
@@ -93,7 +93,7 @@ const Home = () => {
     return setIsGameOver;
   };
 
-  const isGameClear = () => {
+  const isGameClear = useCallback(() => {
     let bombCount2 = 0;
     for (let y = 0; y < 9; y++) {
       for (let x = 0; x < 9; x++) {
@@ -103,7 +103,7 @@ const Home = () => {
       }
     }
     return bombCount2 === 71;
-  };
+  }, [board, bombMap]);
 
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -121,7 +121,7 @@ const Home = () => {
       setIsActive(false);
     }
     return () => clearInterval(interval);
-  }, [isActive, time, setIsGameOver, isGameClear()]);
+  }, [isActive, time, setIsGameOver, isGameClear]);
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
@@ -178,18 +178,20 @@ const Home = () => {
     }
     return bombMap;
   };
-
+  let bombCount3 = 10;
   if (isGameClear()) {
     for (let y = 0; y < 9; y++) {
       for (let x = 0; x < 9; x++) {
         if (bombMap[y][x] === 1) {
           board[y][x] = 10;
+          bombCount3 = 0;
         }
       }
     }
   }
 
   const resetButton = () => {
+    bombCount3 = 10;
     setIsGameOver = false;
     setTime(0);
     setIsActive(false);
@@ -226,7 +228,7 @@ const Home = () => {
       {/* <button onClick={() => userInputs((p) => (p + 1) % 14)}>初級</button> */}
       <div className={styles.bigboardStyle}>
         <div className={styles.miniBoardStyle} onClick={() => resetButton()}>
-          <div className={styles.bombCountStyle} />
+          <div className={styles.bombCountStyle}>{bombCount3}</div>
           <div className={styles.nicoStyle}>
             {board.map((row, y) =>
               row.map((cell, x) => (
