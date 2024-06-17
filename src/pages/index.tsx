@@ -58,21 +58,18 @@ const Home = () => {
       const nx = x + dx;
       const ny = y + dy;
       if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
-      if (bombCount === 0 && userInputs[ny][nx] === 0 && bombMap[ny][nx] === 0) {
-        userInputs[ny][nx] = 1;
+      if (bombCount === 0 && board[ny][nx] === -1 && bombMap[ny][nx] === 0) {
         openCell(board, nx, ny);
       }
     }
   };
 
   //userInputsが0なら石にする・1ならopenCellを呼び出す
-  const board = structuredClone(bombMap);
+  const board = bombMap.map((row) => row.map(() => -1));
 
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
-      if (userInputs[y][x] === 0) {
-        board[y][x] = -1;
-      } else {
+      if (userInputs[y][x] === 1) {
         openCell(board, x, y);
       }
     }
@@ -107,7 +104,6 @@ const Home = () => {
 
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  // const [isStarted, setIsStarted] = useState(false);
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
     if (isActive) {
@@ -128,7 +124,6 @@ const Home = () => {
     if (setIsGameOver || isGameClear()) return;
 
     if (!isActive) {
-      // setIsStarted(true);
       setIsActive(true);
     }
 
@@ -151,13 +146,35 @@ const Home = () => {
     setUserInputs(newUserInputs);
   };
 
+  // 右クリック
+  const rightClick = (x: number, y: number, event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    if (board[y][x] === -1 || board[y][x] === 10) {
+      userInputs[y][x] = 2;
+    } else {
+      return;
+    }
+    console.log('rightClick');
+  };
+
+  for (let y = 0; y < 9; y++) {
+    for (let x = 0; x < 9; x++) {
+      if (userInputs[y][x] === 2 && board[y][x] === -1) {
+        board[y][x] = 10;
+      }
+      if (userInputs[y][x] === 2 && board[y][x] === 10) {
+        board[y][x] === -1;
+      }
+    }
+  }
+
   //ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
     const bombPosition: number[][] = [];
     while (bombPosition.length < 10) {
       const bombx = Math.floor(Math.random() * 9);
       const bomby = Math.floor(Math.random() * 9);
-      console.table([bomby, bombx]);
+      // console.table([bomby, bombx]);
       if (x === bombx && y === bomby) {
         continue;
       }
@@ -257,6 +274,9 @@ const Home = () => {
               <div
                 className={styles.stoneStyle}
                 onClick={() => clickHandler(x, y)}
+                onContextMenu={(event) => {
+                  rightClick(x, y, event);
+                }}
                 key={`${x}-${y}`}
                 style={{
                   borderColor:
