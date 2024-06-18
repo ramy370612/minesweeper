@@ -121,7 +121,7 @@ const Home = () => {
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
-    if (setIsGameOver || isGameClear()) return;
+    if (setIsGameOver || isGameClear() || userInputs[y][x] === 2 || userInputs[y][x] === 3) return;
 
     if (!isActive) {
       setIsActive(true);
@@ -149,12 +149,14 @@ const Home = () => {
   // 右クリック
   const rightClick = (x: number, y: number, event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if (board[y][x] === -1 || board[y][x] === 10) {
+    if (board[y][x] === -1) {
       userInputs[y][x] = 2;
+    }
+    if (board[y][x] === 10) {
+      userInputs[y][x] = 0;
     } else {
       return;
     }
-    console.log('rightClick');
   };
 
   for (let y = 0; y < 9; y++) {
