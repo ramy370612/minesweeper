@@ -170,6 +170,14 @@ const Home = () => {
     }
   }
 
+  const flagMiss = (x: number, y: number) => {
+    let setIsFlagMiss = false;
+    if (board[y][x] === 10 && bombMap[y][x] === 0) {
+      setIsFlagMiss = true;
+    }
+    return setIsFlagMiss;
+  };
+
   //ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
     const bombPosition: number[][] = [];
@@ -286,7 +294,10 @@ const Home = () => {
                       ? '#909090'
                       : '#fff #909090 #909090 #fff',
                   backgroundColor:
-                    isGameOver(x, y) && bombMap[y][x] && userInputs[y][x] ? '#f77f7f' : '#c9c7c7',
+                    (isGameOver(x, y) && bombMap[y][x] && userInputs[y][x]) ||
+                    (flagMiss(x, y) && isGameOver(x, y))
+                      ? '#f77f7f'
+                      : '#c9c7c7',
                 }}
               >
                 <div
