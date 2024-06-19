@@ -122,7 +122,7 @@ const Home = () => {
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
-    if (setIsGameOver || isGameClear() || userInputs[y][x] === 2 || userInputs[y][x] === 3) return;
+    if (setIsGameOver || isGameClear() || userInputs[y][x] === 2) return;
 
     if (!isActive) {
       setIsActive(true);
@@ -152,9 +152,13 @@ const Home = () => {
     event.preventDefault();
     if (board[y][x] === -1) {
       userInputs[y][x] = 2;
+      const newUserInputs = structuredClone(userInputs);
+      setUserInputs(newUserInputs);
     }
     if (board[y][x] === 10) {
       userInputs[y][x] = 0;
+      const newUserInputs = structuredClone(userInputs);
+      setUserInputs(newUserInputs);
     } else {
       return;
     }
