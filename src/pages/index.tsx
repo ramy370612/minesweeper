@@ -80,7 +80,7 @@ const Home = () => {
     if (userInputs[y][x] === 1 && bombMap[y][x] === 1) {
       for (let y = 0; y < 9; y++) {
         for (let x = 0; x < 9; x++) {
-          if (bombMap[y][x] === 1) {
+          if (bombMap[y][x] === 1 && userInputs[y][x] !== 2) {
             board[y][x] = 11;
           }
         }
@@ -89,6 +89,7 @@ const Home = () => {
     }
     return setIsGameOver;
   };
+  console.table(userInputs);
 
   const isGameClear = useCallback(() => {
     let bombCount2 = 0;
@@ -170,8 +171,8 @@ const Home = () => {
     }
   }
 
+  let setIsFlagMiss = false;
   const flagMiss = (x: number, y: number) => {
-    let setIsFlagMiss = false;
     if (board[y][x] === 10 && bombMap[y][x] === 0) {
       setIsFlagMiss = true;
     }
@@ -205,7 +206,15 @@ const Home = () => {
     }
     return bombMap;
   };
+
   let bombCount3 = 10;
+  for (let y = 0; y < 9; y++) {
+    for (let x = 0; x < 9; x++) {
+      if (board[y][x] === 10) {
+        bombCount3 = bombCount3 - 1;
+      }
+    }
+  }
   if (isGameClear()) {
     for (let y = 0; y < 9; y++) {
       for (let x = 0; x < 9; x++) {
@@ -295,9 +304,9 @@ const Home = () => {
                       : '#fff #909090 #909090 #fff',
                   backgroundColor:
                     (isGameOver(x, y) && bombMap[y][x] && userInputs[y][x]) ||
-                    (flagMiss(x, y) && isGameOver(x, y))
+                    (flagMiss(x, y) && isGameOver(x, y) && board[y][x] === 10)
                       ? '#f77f7f'
-                      : '#c9c7c7',
+                      : '#c6c6c6',
                 }}
               >
                 <div
