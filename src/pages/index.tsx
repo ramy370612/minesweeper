@@ -150,6 +150,9 @@ const Home = () => {
   // 右クリック
   const rightClick = (x: number, y: number, event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
+    if (!isActive) {
+      setIsActive(true);
+    }
     if (board[y][x] === -1) {
       userInputs[y][x] = 2;
       const newUserInputs = structuredClone(userInputs);
