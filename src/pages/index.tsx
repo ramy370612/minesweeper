@@ -150,6 +150,7 @@ const Home = () => {
   // 右クリック
   const rightClick = (x: number, y: number, event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
+    if (setIsGameOver || isGameClear() || userInputs[y][x] === 2) return;
     if (!isActive) {
       setIsActive(true);
     }
@@ -180,11 +181,13 @@ const Home = () => {
 
   let setIsFlagMiss = false;
   const flagMiss = (x: number, y: number) => {
-    if (board[y][x] === 10 && bombMap[y][x] === 0) {
+    if (userInputs[y][x] === 2 && bombMap[y][x] === 1) {
       setIsFlagMiss = true;
     }
     return setIsFlagMiss;
   };
+  console.log('bombMap');
+  console.table(bombMap);
 
   //ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
@@ -236,6 +239,7 @@ const Home = () => {
   const resetButton = () => {
     bombCount3 = 10;
     setIsGameOver = false;
+    setIsFlagMiss = false;
     setTime(0);
     setIsActive(false);
     // setIsStarted(false);
@@ -311,7 +315,7 @@ const Home = () => {
                       : '#fff #909090 #909090 #fff',
                   backgroundColor:
                     (isGameOver(x, y) && bombMap[y][x] && userInputs[y][x]) ||
-                    (flagMiss(x, y) && isGameOver(x, y) && board[y][x] === 10)
+                    (flagMiss(x, y) === false && isGameOver(x, y) && board[y][x] === 10)
                       ? '#f77f7f'
                       : '#c6c6c6',
                 }}
