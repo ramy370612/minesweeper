@@ -245,8 +245,10 @@ const Home = () => {
     setIsFlagMiss = false;
     setTime(0);
     setIsActive(false);
-    // const Beginner = () => {
+    Beginner();
+  };
 
+  const Beginner = () => {
     const newbomMap = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -272,13 +274,12 @@ const Home = () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
     setUserInputs(newUserInputs);
-    // };
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.level}>
-        <button>初級</button>
+        <button onClick={() => Beginner()}>初級</button>
         <button>中級</button>
         <button>上級</button>
         <button>カスタム</button>
