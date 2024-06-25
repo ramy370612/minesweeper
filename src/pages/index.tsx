@@ -150,7 +150,7 @@ const Home = () => {
   // 右クリック
   const rightClick = (x: number, y: number, event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if (setIsGameOver || isGameClear() || userInputs[y][x] === 2) return;
+    if (setIsGameOver || isGameClear()) return;
     if (!isActive) {
       setIsActive(true);
     }
@@ -179,23 +179,12 @@ const Home = () => {
     }
   }
 
-  let setIsFlagMiss = false;
-  const flagMiss = (x: number, y: number) => {
-    if (userInputs[y][x] === 2 && bombMap[y][x] === 1) {
-      setIsFlagMiss = true;
-    }
-    return setIsFlagMiss;
-  };
-  console.log('bombMap');
-  console.table(bombMap);
-
   //ボムをランダムに置く
   const bombset = (x: number, y: number, bombMap: number[][]) => {
     const bombPosition: number[][] = [];
     while (bombPosition.length < 10) {
       const bombx = Math.floor(Math.random() * 9);
       const bomby = Math.floor(Math.random() * 9);
-      // console.table([bomby, bombx]);
       if (x === bombx && y === bomby) {
         continue;
       }
@@ -236,13 +225,28 @@ const Home = () => {
     }
   }
 
+  let setIsFlagMiss = false;
+  const flagMiss = () => {
+    for (let y = 0; y < 9; y++) {
+      for (let x = 0; x < 9; x++) {
+        if (userInputs[y][x] === 2 && bombMap[y][x] === 0 && board[y][x] === 10) {
+          setIsFlagMiss = true;
+        }
+      }
+    }
+    return setIsFlagMiss;
+  };
+  console.log('bombMap');
+  console.table(bombMap);
+
   const resetButton = () => {
     bombCount3 = 10;
     setIsGameOver = false;
     setIsFlagMiss = false;
     setTime(0);
     setIsActive(false);
-    // setIsStarted(false);
+    // const Beginner = () => {
+
     const newbomMap = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -268,11 +272,18 @@ const Home = () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
     setUserInputs(newUserInputs);
+    // };
   };
 
   return (
     <div className={styles.container}>
-      {/* <button onClick={() => userInputs((p) => (p + 1) % 14)}>初級</button> */}
+      <div className={styles.level}>
+        <button>初級</button>
+        <button>中級</button>
+        <button>上級</button>
+        <button>カスタム</button>
+      </div>
+
       <div className={styles.bigboardStyle}>
         <div className={styles.miniBoardStyle} onClick={() => resetButton()}>
           <div className={styles.bombCountStyle}>{bombCount3}</div>
@@ -315,7 +326,7 @@ const Home = () => {
                       : '#fff #909090 #909090 #fff',
                   backgroundColor:
                     (isGameOver(x, y) && bombMap[y][x] && userInputs[y][x]) ||
-                    (flagMiss(x, y) === false && isGameOver(x, y) && board[y][x] === 10)
+                    (flagMiss() && isGameOver(x, y) && board[y][x] === 10 && bombMap[y][x] === 0)
                       ? '#f77f7f'
                       : '#c6c6c6',
                 }}

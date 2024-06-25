@@ -8,6 +8,11 @@
   padding: 0 0.5rem;
 }
 
+.level {
+  display: flex;
+  float: left;
+}
+
 .bigboardStyle {
   display: flex;
   flex-wrap: wrap;
