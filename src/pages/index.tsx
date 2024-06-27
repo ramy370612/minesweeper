@@ -267,12 +267,20 @@ const Home = () => {
     setUserInputs(newUserInputs);
   };
 
+  const hard = () => {
+    const newbomMap = generateCell(30, 16);
+    setBombMap(newbomMap);
+
+    const newUserInputs = generateCell(30, 16);
+    setUserInputs(newUserInputs);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.level}>
         <button onClick={() => easy()}>初級</button>
         <button onClick={() => medium()}>中級</button>
-        <button>上級</button>
+        <button onClick={() => hard()}>上級</button>
         <button>カスタム</button>
       </div>
 
