@@ -245,42 +245,33 @@ const Home = () => {
     setIsFlagMiss = false;
     setTime(0);
     setIsActive(false);
-    Beginner();
+    easy();
   };
 
-  const Beginner = () => {
-    const newbomMap = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ];
+  const generateCell = (width: number, height: number): number[][] => {
+    return Array.from({ length: height }, () => Array.from({ length: width }, () => 0));
+  };
+  const easy = () => {
+    const newbomMap = generateCell(9, 9);
     setBombMap(newbomMap);
 
-    const newUserInputs = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ];
+    const newUserInputs = generateCell(9, 9);
+    setUserInputs(newUserInputs);
+  };
+
+  const medium = () => {
+    const newbomMap = generateCell(16, 16);
+    setBombMap(newbomMap);
+
+    const newUserInputs = generateCell(16, 16);
     setUserInputs(newUserInputs);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.level}>
-        <button onClick={() => Beginner()}>初級</button>
-        <button>中級</button>
+        <button onClick={() => easy()}>初級</button>
+        <button onClick={() => medium()}>中級</button>
         <button>上級</button>
         <button>カスタム</button>
       </div>
@@ -310,7 +301,7 @@ const Home = () => {
           <div className={styles.timeStyle}>{time}</div>
         </div>
 
-        <div className={styles.gameboardStyle}>
+        <div className={styles.gameboardStyle} style={{ width: '522px' }}>
           {board.map((row, y) =>
             row.map((cell, x) => (
               <div
