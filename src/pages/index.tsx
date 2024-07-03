@@ -43,7 +43,7 @@ const Home = () => {
     for (const [dy, dx] of directions) {
       const nx = x + dx;
       const ny = y + dy;
-      if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
+      if (nx < 0 || nx >= userInputs.length - 1 || ny < 0 || ny >= userInputs.length - 1) continue;
 
       if (bombMap[ny][nx] === 1) {
         bombCount += 1;
@@ -57,7 +57,7 @@ const Home = () => {
     for (const [dy, dx] of directions) {
       const nx = x + dx;
       const ny = y + dy;
-      if (nx < 0 || nx >= 9 || ny < 0 || ny >= 9) continue;
+      if (nx < 0 || nx >= userInputs.length - 1 || ny < 0 || ny >= userInputs.length - 1) continue;
       if (bombCount === 0 && board[ny][nx] === -1 && bombMap[ny][nx] === 0) {
         openCell(board, nx, ny);
       }
@@ -67,8 +67,8 @@ const Home = () => {
   //userInputsが0なら石にする・1ならopenCellを呼び出す
   const board = bombMap.map((row) => row.map(() => -1));
 
-  for (let y = 0; y < 9; y++) {
-    for (let x = 0; x < 9; x++) {
+  for (let y = 0; y < userInputs.length - 1; y++) {
+    for (let x = 0; x < userInputs.length - 1; x++) {
       if (userInputs[y][x] === 1) {
         openCell(board, x, y);
       }
@@ -78,8 +78,8 @@ const Home = () => {
   let setIsGameOver = false;
   const isGameOver = (x: number, y: number) => {
     if (userInputs[y][x] === 1 && bombMap[y][x] === 1) {
-      for (let y = 0; y < 9; y++) {
-        for (let x = 0; x < 9; x++) {
+      for (let y = 0; y < userInputs.length - 1; y++) {
+        for (let x = 0; x < userInputs.length - 1; x++) {
           if (bombMap[y][x] === 1 && userInputs[y][x] !== 2) {
             board[y][x] = 11;
           }
@@ -93,15 +93,15 @@ const Home = () => {
 
   const isGameClear = useCallback(() => {
     let bombCount2 = 0;
-    for (let y = 0; y < 9; y++) {
-      for (let x = 0; x < 9; x++) {
+    for (let y = 0; y < userInputs.length - 1; y++) {
+      for (let x = 0; x < userInputs.length - 1; x++) {
         if (board[y][x] !== -1 && bombMap[y][x] !== 1) {
           bombCount2++;
         }
       }
     }
     return bombCount2 === 71;
-  }, [board, bombMap]);
+  }, [board, bombMap, userInputs.length]);
 
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -122,6 +122,8 @@ const Home = () => {
 
   //クリック時の動作
   const clickHandler = (x: number, y: number) => {
+    console.log(x, y);
+    console.log('x,y');
     if (setIsGameOver || isGameClear() || userInputs[y][x] === 2) return;
 
     if (!isActive) {
@@ -129,8 +131,8 @@ const Home = () => {
     }
 
     let bombCount = 0;
-    for (let y = 0; y < 9; y++) {
-      for (let x = 0; x < 9; x++) {
+    for (let y = 0; y < userInputs.length - 1; y++) {
+      for (let x = 0; x < userInputs.length - 1; x++) {
         if (bombMap[y][x] === 1) {
           bombCount += 1;
         }
@@ -168,8 +170,8 @@ const Home = () => {
     }
   };
 
-  for (let y = 0; y < 9; y++) {
-    for (let x = 0; x < 9; x++) {
+  for (let y = 0; y < userInputs.length - 1; y++) {
+    for (let x = 0; x < userInputs.length - 1; x++) {
       if (userInputs[y][x] === 2 && board[y][x] === -1) {
         board[y][x] = 10;
       }
@@ -207,16 +209,16 @@ const Home = () => {
   };
 
   let bombCount3 = 10;
-  for (let y = 0; y < 9; y++) {
-    for (let x = 0; x < 9; x++) {
+  for (let y = 0; y < userInputs.length - 1; y++) {
+    for (let x = 0; x < userInputs.length - 1; x++) {
       if (board[y][x] === 10) {
         bombCount3 = bombCount3 - 1;
       }
     }
   }
   if (isGameClear()) {
-    for (let y = 0; y < 9; y++) {
-      for (let x = 0; x < 9; x++) {
+    for (let y = 0; y < userInputs.length - 1; y++) {
+      for (let x = 0; x < userInputs.length - 1; x++) {
         if (bombMap[y][x] === 1) {
           board[y][x] = 10;
           bombCount3 = 0;
@@ -227,8 +229,8 @@ const Home = () => {
 
   let setIsFlagMiss = false;
   const flagMiss = () => {
-    for (let y = 0; y < 9; y++) {
-      for (let x = 0; x < 9; x++) {
+    for (let y = 0; y < userInputs.length - 1; y++) {
+      for (let x = 0; x < userInputs.length - 1; x++) {
         if (userInputs[y][x] === 2 && bombMap[y][x] === 0 && board[y][x] === 10) {
           setIsFlagMiss = true;
         }
